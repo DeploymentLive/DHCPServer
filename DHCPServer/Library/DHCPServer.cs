@@ -900,7 +900,22 @@ namespace GitHub.JPMikkers.DHCP
                                     }
                                     else
                                     {
-                                        Trace("No more free addresses. Don't respond to discover");
+                                        Trace("No free addresses.");
+
+                                        // This can be a Boot Server (not DHCP), check for PXE requests.
+                                        if(dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.VendorClassIdentifier))
+                                        {
+                                            Trace("Found Option [60|VendorClassIdentifier] Assmue this is a Boot Server (not DHCP).");
+                                            SendACK(dhcpMessage, new IPAddress(0), new TimeSpan(0));
+                                        }
+                                        else if(dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientMachineIdentifier) &&
+                                                dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientNetworkInterfaceIdentifier) &&
+                                                dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientSystemArchitectureType))
+                                        {
+                                            Trace("Found Option [93,94,97|RFC4578] Assume this is a Boot Server (not DHCP).");
+                                            SendACK(dhcpMessage, new IPAddress(0), new TimeSpan(0));
+                                        }
+
                                     }
                                 }
                             }
