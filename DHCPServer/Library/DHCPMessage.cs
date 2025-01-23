@@ -198,6 +198,7 @@ namespace GitHub.JPMikkers.DHCP
             RegisterOption(new DHCPOptionRenewalTimeValue());
             RegisterOption(new DHCPOptionRebindingTimeValue());
             RegisterOption(new DHCPOptionVendorClassIdentifier());
+            RegisterOption(new DHCPOptionUserClassIdentifier());
             RegisterOption(new DHCPOptionClientIdentifier());
             RegisterOption(new DHCPOptionFullyQualifiedDomainName());
             RegisterOption(new DHCPOptionSubnetMask());
