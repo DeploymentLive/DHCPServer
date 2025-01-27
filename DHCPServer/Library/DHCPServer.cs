@@ -903,17 +903,17 @@ namespace GitHub.JPMikkers.DHCP
                                         Trace("No free addresses.");
 
                                         // This can be a Boot Server (not DHCP), check for PXE requests.
-                                        if(dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.VendorClassIdentifier))
+                                        if(dhcpMessage.GetOption(TDHCPOption.VendorClassIdentifier) != null)
                                         {
                                             Trace("Found Option [60|VendorClassIdentifier] Assmue this is a Boot Server (not DHCP).");
-                                            SendACK(dhcpMessage, new IPAddress(0), new TimeSpan(0));
+                                            SendACK(dhcpMessage, dhcpMessage.ClientIPAddress, new TimeSpan(0));
                                         }
-                                        else if(dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientMachineIdentifier) &&
-                                                dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientNetworkInterfaceIdentifier) &&
-                                                dhcpMessage.Options.Exists(x => x.OptionType == TDHCPOption.ClientSystemArchitectureType))
+                                        else if((dhcpMessage.GetOption(TDHCPOption.ClientMachineIdentifier) != null) &&
+                                                (dhcpMessage.GetOption(TDHCPOption.ClientNetworkInterfaceIdentifier) != null) &&
+                                                (dhcpMessage.GetOption(TDHCPOption.ClientSystemArchitectureType) != null))
                                         {
                                             Trace("Found Option [93,94,97|RFC4578] Assume this is a Boot Server (not DHCP).");
-                                            SendACK(dhcpMessage, new IPAddress(0), new TimeSpan(0));
+                                            SendACK(dhcpMessage, dhcpMessage.ClientIPAddress, new TimeSpan(0));
                                         }
 
                                     }
